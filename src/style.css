@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: Inter;
+  src: url('/assets/Inter.ttf') format('truetype');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: Inter, system-ui, sans-serif;
+  --color-canvas: #ffffed;
+  --color-ink: #171919;
+  --color-muted: #555c5b;
+  --color-line: #dde1e0;
+  --color-action: #202322;
+  --color-navy: #132b3a;
+  --color-panel: #e8f5fb;
+  --color-marker: #c8f35a;
+}
+
+:root { --app-width: 480px; }
+
+@layer base {
+  html { @apply bg-[#ebeeec] text-ink antialiased; }
+  body { @apply m-0; }
+  button:not(:disabled) { @apply cursor-pointer; }
+  button:focus-visible { @apply outline-2 -outline-offset-2 outline-ink; }
+  h1 { @apply text-[1.875rem] leading-[1.2] font-semibold tracking-[-.033em]; }
+  h2 { @apply text-xl leading-snug font-semibold tracking-[-.02em]; }
+  input, textarea { @apply min-w-0 w-full text-[1rem] text-ink; }
+}
+
+@layer components {
+  .app-shell {
+    @apply relative mx-auto flex max-w-[var(--app-width)] flex-col overflow-hidden bg-canvas text-[1rem] leading-[1.45];
+    letter-spacing: .015em;
+    height: var(--app-height, 100dvh);
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .scroll-area { @apply min-h-0 flex-1 overflow-y-auto overscroll-contain; scrollbar-width: thin; }
+  .support { @apply text-sm leading-[1.4] tracking-[.015em] text-muted; }
+  .section-title { @apply mt-[26px] mb-3; }
+  .error { @apply text-[.8125rem] text-[#a32621]; }
+
+  .primary { @apply flex min-h-[54px] w-full items-center justify-center rounded-full bg-action px-5 py-2.5 text-center font-semibold text-white hover:bg-ink; }
+  .result-action { @apply min-h-14 bg-ink; }
+  .text-button { @apply inline-flex min-h-12 min-w-11 items-center justify-center rounded-full px-3 py-2 text-sm leading-snug font-semibold hover:bg-ink/5; }
+  .circle { @apply m-0.5 inline-grid size-11 shrink-0 place-items-center rounded-full bg-white text-ink hover:bg-[#f4f5f4]; }
+  .screen-action { @apply shrink-0 px-5; padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+
+  .start { display: grid; grid-template-rows: minmax(0, 42fr) auto minmax(0, 58fr); }
+  .start-actions { @apply row-start-2 px-5 py-6; }
+  .tab-bar {
+    @apply grid shrink-0 grid-cols-2 border-t border-line bg-canvas pt-px;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .tab-bar button { @apply flex min-h-[60px] items-center justify-center gap-2 px-3 py-4 text-sm text-muted hover:bg-ink/5; }
+  .tab-bar [aria-current] { @apply font-semibold text-ink; }
+
+  .detail-row { @apply flex w-full items-start border-b border-line py-4 text-left; }
+  @media (hover: hover) {
+    button.detail-row:hover, .option-row:hover { @apply bg-ink/5; }
+  }
+  .detail-label { @apply min-w-0 flex-[5] pr-3 text-sm text-muted; }
+  .detail-value { @apply min-w-0 flex-[6] text-right font-medium break-words; }
+  .option-row { @apply flex min-h-14 w-full items-center justify-between gap-3 py-2 text-left; }
+
+  .verdict { @apply text-[1.625rem] leading-[1.15] font-bold tracking-[-.019em]; }
+  .comparison-panel { @apply mx-3 rounded-[20px] bg-panel px-4 pt-4 pb-2 text-sm leading-[1.4] tracking-normal text-navy; }
+  .comparison-row { @apply flex items-center justify-between gap-3 py-2; }
+  .comparison-row > span { @apply min-w-0; }
+  .comparison-row strong { @apply text-right font-semibold tabular-nums; }
+
+  .range-chart { @apply relative mx-2 h-[70px]; }
+  .range-line { @apply absolute inset-x-0 top-[32px] h-[3px] bg-line; }
+  .range-median { @apply absolute top-[33px] h-3.5 w-0.5 -translate-x-1/2 bg-muted; }
+  .range-listing { @apply absolute top-[26px] size-4 -translate-x-1/2 rounded-full border-[1.5px] border-ink bg-marker; }
+  .range-listing::before { content: ''; @apply absolute -top-2 left-1/2 h-2 w-px -translate-x-1/2 bg-muted; }
+  .range-label { @apply absolute -translate-x-1/2 text-center text-xs text-muted whitespace-nowrap; }
+  .range-label-top { @apply top-0; }
+  .range-label-bottom { @apply top-[52px]; }
+
+  .chat-title { @apply text-xl leading-snug tracking-[-.02em]; }
+  .chat-empty { @apply flex flex-col px-5 pt-3 pb-1; }
+  .chat-suggestions { @apply mt-auto; }
+  .message { @apply mr-auto mb-4 w-fit max-w-full rounded-[20px] bg-white p-4 wrap-break-word whitespace-pre-line; }
+  .message.buyer { @apply mr-0 ml-auto bg-[#e3e7e5]; }
+  .composer { @apply flex min-h-14 items-center gap-2 rounded-full border border-line bg-white py-[3px] pr-[5px] pl-4; }
+  .composer input { @apply flex-1 bg-transparent py-2 placeholder:text-ink focus:outline-none; }
+  .composer:focus-within { @apply border-muted; }
+  .composer button { @apply grid size-10 shrink-0 place-items-center rounded-full bg-action text-white; }
+  .composer button:disabled { @apply bg-[#e3e3e3] text-[#969a98]; }
+
+  .sheet, .drawer { @apply fixed overflow-y-auto overscroll-contain border-0 bg-canvas text-ink; }
+  .sheet {
+    @apply inset-x-0 top-auto bottom-0 mx-auto w-full max-w-[var(--app-width)] rounded-t-[30px] px-5;
+    bottom: max(0px, calc(100dvh - var(--app-height, 100dvh)));
+    max-height: calc(var(--app-height, 100dvh) - max(16px, env(safe-area-inset-top)));
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+  }
+  .sheet::backdrop, .drawer::backdrop { @apply bg-black/54; }
+  .sheet-handle { @apply mx-auto mt-[22px] mb-6 h-1 w-8 rounded-full bg-ink; }
+  .drawer {
+    @apply top-0 right-auto bottom-auto m-0 max-w-none overflow-hidden rounded-r-2xl;
+    left: max(0px, calc((100% - var(--app-width)) / 2));
+    width: min(304px, calc(100% - 16px));
+    height: var(--app-height, 100dvh);
+    max-height: none;
+    padding-block: env(safe-area-inset-top) env(safe-area-inset-bottom);
+  }
+  .drawer[open] { @apply flex flex-col; }
+  .drawer::backdrop {
+    width: min(100%, var(--app-width));
+    height: var(--app-height, 100dvh);
+    margin-inline: auto;
+  }
+  .field-box { @apply block rounded-2xl border border-line bg-white px-4 py-2 text-sm text-muted focus-within:border-ink; }
+  .field-box input, .field-box textarea { @apply block bg-transparent py-1 focus:outline-none; }
+  .image-error { @apply absolute inset-x-5 bottom-20 flex items-center justify-between gap-3 rounded-lg bg-ink p-4 text-sm text-white; }
+  .image-error button { @apply font-semibold; }
+}
