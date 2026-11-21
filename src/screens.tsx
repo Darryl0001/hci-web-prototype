@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState, type FormEvent } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type FormEvent } from 'react'
 import {
   asset, comparisonQuestion, displayValue, fieldError, fields, listingTitle, minimumMatches,
   pesos, priceOf, recencyDays, requiredFields, sellerQuestion, sourceOf,
@@ -19,6 +19,30 @@ export function Start({ upload, manual, demo }: { upload: () => void; manual: ()
       <Primary onClick={upload}>Upload screenshot</Primary>
       <TextButton className="mt-1 w-full" onClick={manual}>Enter details manually</TextButton>
       <TextButton className="w-full" onClick={demo}>Try demo listings</TextButton>
+    </div>
+  </main>
+}
+
+export type LoadingStep = {
+  title: string
+  description: string
+  image?: string
+  context?: string
+}
+
+export function LoadingScreen({ title, description, image, context }: LoadingStep) {
+  const heading = useRef<HTMLHeadingElement>(null)
+  useEffect(() => { heading.current?.focus({ preventScroll: true }) }, [])
+
+  return <main className="scroll-area flex flex-col px-5 py-8">
+    <div className="mx-auto my-auto flex max-w-sm flex-col items-center text-center">
+      {image && <Screenshot src={image} className="mb-6 h-32 w-28 border border-line bg-white object-cover object-top" />}
+      <span aria-hidden="true" className="mb-5 size-9 rounded-full border-2 border-line border-t-action motion-safe:animate-spin" />
+      <h1 ref={heading} tabIndex={-1} aria-describedby="loading-description" className="outline-none">{title}</h1>
+      <div id="loading-description" className="support mt-2">
+        <p>{description}</p>
+        {context && <p className="mt-1">{context}</p>}
+      </div>
     </div>
   </main>
 }
